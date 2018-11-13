@@ -16,7 +16,7 @@ bool CGameCamera::Start()
 	m_player = FindGO<Player>("Player");
 	m_CamPos = m_player->GetPosition();
 	m_CamPos.y += 20.0f;
-	m_CamPos.z -= 60.0f;
+	m_CamPos.z -= 50.0f;
 	//カメラを初期化。
 	MainCamera().SetPosition(m_CamPos);
 	MainCamera().SetTarget(m_player->GetPosition());
@@ -35,7 +35,7 @@ void CGameCamera::SetAvoidRot() {
 
 }
 void CGameCamera::Update() {
-	
+
 	CVector3 toCameraPos = CVector3::Zero();
 	toCameraPos = m_springCamera.GetPosition() - m_springCamera.GetTarget();
 	float height = toCameraPos.y;
@@ -93,6 +93,16 @@ void CGameCamera::Update() {
 
 	//視点を計算する
 	if (!(x == 0 && y == 0)) {
+		pos = target + toNewCameraPos;
+		m_springCamera.SetTarget(target);
+		m_springCamera.SetPosition(pos);
+	}
+	//照準
+	if (g_pad->IsPress(enButtonLB2)) {
+	/*	CVector3 vec;
+		vec = MainCamera().GetForward()*20.0f;
+		target += vec;*/
+		target = m_player->GetTarPosition();
 		pos = target + toNewCameraPos;
 		m_springCamera.SetTarget(target);
 		m_springCamera.SetPosition(pos);

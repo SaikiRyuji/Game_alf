@@ -26,6 +26,12 @@ public:
 	CVector3 GetPosition() {
 		return m_position;
 	}
+	CQuaternion GetRotation() {
+		return m_rotation;
+	}
+	CVector3 GetTarPosition() {
+		return m_tarpos;
+	}
 private:
 	enum EnAnimationClip {
 		enAnimationClip_idle,		//待機アニメーション。
@@ -37,6 +43,7 @@ private:
 		enAnimationClip_item,		//アイテム使用アニメーション。
 		enAnimationClip_Num,		//アニメーションクリップの数。
 	};
+	CVector3 m_tarpos = CVector3::Zero();
 	AnimationClip m_animClips[enAnimationClip_Num];		//アニメーションクリップ。
 	Animation m_animation;								//アニメーション
 	SkinModel m_model;									//スキンモデル

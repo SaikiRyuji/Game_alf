@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
 #include"Enemy.h"
-
 Player::Player()
 {
 }
@@ -19,14 +18,14 @@ bool Player::Start() {
 		m_position//初期位置
 	);
 	//cmoファイルの読み込み。
-	m_model.Init(L"Assets/modelData/Player.cmo");
+	m_model.Init(L"Assets/modelData/unityChan.cmo");
 	//ddsファイルの読み込み
 	m_spritetex.CreateFromDDSTextureFromFile(L"Assets/sprite/hpd.dds");
 	//テクスチャの初期化
 	m_sprite.Init(m_spritetex, 1, 1);
 	//アニメーション読み込み初期化
-	/*InitAnimation();
-	m_animation.Play(enAnimationClip_idle);*/
+	InitAnimation();
+	m_animation.Play(enAnimationClip_idle);
 	m_enemy = FindGO<Enemy>("Enemy");
 	return true;
 }
@@ -127,6 +126,11 @@ void Player::Rotation() {
 	}
 	float angle = atan2(m_moveSpeed.x, m_moveSpeed.z);
 	m_rotation.SetRotation(CVector3::AxisY(), angle);
+
+	m_rot.MakeRotationFromQuaternion(m_rotation);
+	m_tarpos.x = m_rot.m[2][0] * 5.0 + m_position.x;
+	m_tarpos.y = m_rot.m[2][1] * 5.0 + m_position.y;
+	m_tarpos.z = m_rot.m[2][2] * 5.0 + m_position.z;
 }
 void Player::Avoid() {
 	//エネミーからプレイヤーのベクトル
@@ -156,12 +160,12 @@ void Player::Avoid() {
 }
 void Player::Update()
 {
-	//AnimataionControl();
+	AnimataionControl();
 	Move();
 	Rotation();
 	Avoid();
 
-	CQuaternion qRot;
+	CQuaternion qRot=CQuaternion::Identity();
 	qRot.SetRotationDeg(CVector3::AxisX(), 90.0f);
 	qRot.Multiply(m_rotation, qRot);
 	//ワールド行列の更新。
@@ -182,7 +186,7 @@ void Player::Draw()
 	);
 }
 void Player::PostDraw() {
-	if (m_Avoidf) {
+	if (g_pad->IsPress(enButtonLB2)) {
 		m_sprite.Draw(
 			MainCamera2D().GetViewMatrix(),
 			MainCamera2D().GetProjectionMatrix()

@@ -4,9 +4,12 @@
 #include "Player.h"
 #include"BackGround.h"
 #include"Enemy.h"
+#include"GameCamera.h"
 #include "level/Level.h"
 #include"GameCamera.h"
 #include"Engine.h"
+#include"Fade.h"
+#include"Title.h"
 
 ///////////////////////////////////////////////////////////////////
 // ウィンドウプログラムのメイン関数。
@@ -25,9 +28,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームループ。
 	if (Engine().Init(initParam) == true) {
 		//試し
-		//プレイヤ-
+		NewGO<Fade>(1, "Fade");
+		NewGO<Title>(0, nullptr);
+		////プレイヤ-
 
-		Player* player = nullptr;
+	/*	Player* player = nullptr;
 		player = NewGO<Player>(0, "Player");
 
 		BackGround* background = nullptr;
@@ -37,7 +42,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		Camera = NewGO<CGameCamera>(0, "Camera");
 
 		Enemy*enemy = nullptr;
-		enemy = NewGO<Enemy>(0, "Enemy");
+		enemy = NewGO<Enemy>(0, "Enemy");*/
 		//ここまで
 
 		Engine().GameLoop();
