@@ -26,17 +26,29 @@ bool BackGround::Start() {
 	m_rigidBody.Create(rbInfo);					//作成した情報を使って剛体を作成する。
 	PhysicsWorld().AddRigidBody(m_rigidBody);	//作成した剛体を物理ワールドに追加する。
 	m_Scale = { 1.0,1.0,1.0 };
+
+	m_texture.CreateFromDDSTextureFromFile(L"Assets/sprite/title.dds");
+	m_sprite.Init(m_texture, 50,70 );
+	//レベルでポジション取得
+	m_SpritePos = { 10.0f,26.0f,20.0f };
 	return true;
 }
 
 void BackGround::Update() {
 	//ワールド行列の更新。
+	m_sprite.Update(m_SpritePos,CQuaternion::Identity(),CVector3::One());
 	m_skinModel.UpdateWorldMatrix(CVector3::Zero(), CQuaternion::Identity(), m_Scale);
 
 }
 
 void BackGround::Draw() {
 	m_skinModel.Draw(
+		MainCamera().GetViewMatrix(),
+		MainCamera().GetProjectionMatrix()
+	);
+}
+void BackGround::PostDraw() {
+	m_sprite.Draw(
 		MainCamera().GetViewMatrix(),
 		MainCamera().GetProjectionMatrix()
 	);

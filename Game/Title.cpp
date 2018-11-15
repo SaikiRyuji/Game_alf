@@ -11,6 +11,8 @@ Title::~Title()
 {
 }
 bool Title::Start() {
+	m_texture.CreateFromDDSTextureFromFile(L"Assets/sprite/title.dds");
+	m_sprite.Init(m_texture, 1280, 720);
 	m_fade = FindGO<Fade>("Fade");
 	m_fade->StartFadeIn();
 	return true;
@@ -29,4 +31,10 @@ void Title::Update() {
 			m_fade->StartFadeOut();
 		}
 	}
+}
+void Title::Draw() {
+	m_sprite.Draw(
+		MainCamera2D().GetViewMatrix(),
+		MainCamera2D().GetProjectionMatrix()
+	);
 }

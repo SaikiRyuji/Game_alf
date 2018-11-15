@@ -52,6 +52,10 @@ void Game::Update() {
 	}
 						 break;
 	}
+
+	/*if (g_pad->IsTrigger(enButtonStart)){ 
+		m_fade->StartFadeOut();
+	}*/
 }
 
 void Game::Draw() {

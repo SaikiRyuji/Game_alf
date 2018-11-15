@@ -15,6 +15,7 @@ public:
 	//アニメーション制御
 	void AnimataionControl();
 	void Rotation();
+	bool IsFind();
 private:
 	CVector3 m_enepla;
 	CVector3 m_forward = CVector3::AxisZ();			//エネミーの前方方向

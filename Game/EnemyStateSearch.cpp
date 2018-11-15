@@ -12,6 +12,35 @@ EnemyState(enemy)
 EnemyStateSearch::~EnemyStateSearch()
 {
 }
+
+bool EnemyStateSearch::IsFind() {
+	CVector3 enemyForward = CVector3::AxisZ();
+	m_enemy->GetRotation().Multiply(enemyForward);
+	
+	//エネミーからプレイヤーに伸びるベクトルを求める。
+	CVector3 toPlayerDir = m_player->GetPosition() - m_enemy->GetPosition();
+	//正規化を行う前に、プレイヤーまでの距離を求めておく。
+	float toPlayerLen = toPlayerDir.Length();
+	//正規化！
+	toPlayerDir.Normalize();
+	//enemyForwardとtoPlayerDirとの内積を計算する。
+	float d = enemyForward.Dot(toPlayerDir);
+	//内積の結果をacos関数に渡して、enemyForwardとtoPlayerDirのなす角を求める。
+	float angle = acos(d);
+	//視野角判定
+	//fabsfは絶対値を求める関数！
+	//角度はマイナスが存在するから、絶対値にする。
+	float f = CMath::DegToRad(45.0f);
+	float v = fabsf(angle);
+	if (v < f
+		&& toPlayerLen < 300.0f
+		) {
+		//見つけた。
+		return true;
+	}
+	//見つけていない。
+	return false;
+}
 void EnemyStateSearch::AnimataionControl() {
 	//待機アニメーション
 	m_enemy->SetAnimClip(m_enemy->enAnimationClip_idle);
@@ -24,30 +53,6 @@ void EnemyStateSearch::Rotation() {
 	CQuaternion qRot;
 	qRot.SetRotationDeg(CVector3::AxisX(), 90.0f);
 	m_enemy->SetRotaition(qRot);
-	
-	//エネミーの前方向を求める
-	CMatrix mRot;
-	mRot.MakeRotationFromQuaternion(m_enemy->GetRotation());
-	m_forward.x = mRot.m[2][0];
-	m_forward.y = mRot.m[2][1];
-	m_forward.z = mRot.m[2][2];
-	
-	//エネミーからプレイヤーに向かうベクトル 
-	CVector3 toPlayer = m_player->GetPosition()-m_enemy->GetPosition();
-	
-	if (toPlayer.Length() < 40.0f);
-	{
-		//toPlayer正規化 
-		toPlayer.Normalize();
-		//m_forwardとtoPlayerの内積 
-		float angle = toPlayer.Dot(m_forward);
-
-		angle = acosf(angle);
-		//視野内の処理
-		if (fabsf(angle) < CMath::PI*0.25) {
-			
-		}
-	}
 }
 void EnemyStateSearch::Move() {
 	//重力
@@ -64,7 +69,8 @@ void EnemyStateSearch::StateUpdate() {
 		CVector3{ 0.1f,0.1f,0.1f });
 	
 	//試作ステートチェンジ
-	if (g_pad->IsTrigger(enButtonX))
+	//プレイヤの視野角判定
+	if (IsFind() == true)
 	{
 		m_enemy->ChangeState(Enemy::State_Attack);
 	}
@@ -73,5 +79,6 @@ void EnemyStateSearch::StateUpdate() {
 void EnemyStateSearch::StateDraw() {
 	m_enemy->GetModel().Draw(
 		MainCamera().GetViewMatrix(),
-		MainCamera().GetProjectionMatrix());
+		MainCamera().GetProjectionMatrix()
+);
 }

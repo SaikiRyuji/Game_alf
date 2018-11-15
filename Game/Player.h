@@ -1,6 +1,7 @@
 #pragma once
 #include "character/CharacterController.h"
 class Enemy;
+class BackGround;
 class Player :public GameObject
 {
 public:
@@ -21,7 +22,8 @@ public:
 	void InitAnimation();
 	//アニメーション制御
 	void AnimataionControl();
-
+	//アクション処理
+	void Action();
 
 	CVector3 GetPosition() {
 		return m_position;
@@ -58,4 +60,6 @@ private:
 	CMatrix m_rot;										//回転行列
 	float m_friction;							//摩擦力
 	Enemy*m_enemy=nullptr;								//エネミーポインタ
+	BackGround*m_background = nullptr;
+
 };

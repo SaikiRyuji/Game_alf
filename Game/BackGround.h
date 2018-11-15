@@ -10,7 +10,11 @@ public:
 	bool Start()override;
 	void Update()override;
 	void Draw()override;
+	void PostDraw()override;
 
+	CVector3 GetSpritePos(){
+		return m_SpritePos;
+	}
 private:
 	SkinModel m_skinModel;						//スキンモデル。
 	CVector3 m_position = CVector3::Zero();		//座標。
@@ -18,5 +22,8 @@ private:
 	MeshCollider m_meshCollider;				//メッシュコライダー。
 	RigidBody m_rigidBody;						//剛体。
 	Player*player = nullptr;					//プレイヤーポインタ
+	CShaderResourceView m_texture;				//テクスチャ
+	CSprite m_sprite;							//スプライト
+	CVector3 m_SpritePos=CVector3::Zero();		//スプライト座標
 };
 

@@ -55,6 +55,7 @@ void Enemy::ChangeState(State state) {
 }
 
 void Enemy::Update() {
+	
 	m_pState->StateUpdate();
 }
 

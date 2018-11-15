@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include"Enemy.h"
+#include"BackGround.h"
 Player::Player()
 {
 }
@@ -27,6 +28,7 @@ bool Player::Start() {
 	InitAnimation();
 	m_animation.Play(enAnimationClip_idle);
 	m_enemy = FindGO<Enemy>("Enemy");
+	m_background = FindGO<BackGround>("background");
 	return true;
 }
 void Player::InitAnimation() {
@@ -128,9 +130,9 @@ void Player::Rotation() {
 	m_rotation.SetRotation(CVector3::AxisY(), angle);
 
 	m_rot.MakeRotationFromQuaternion(m_rotation);
-	m_tarpos.x = m_rot.m[2][0] * 5.0 + m_position.x;
-	m_tarpos.y = m_rot.m[2][1] * 5.0 + m_position.y;
-	m_tarpos.z = m_rot.m[2][2] * 5.0 + m_position.z;
+	m_tarpos.x = m_rot.m[2][0] * 5.0f + m_position.x;
+	m_tarpos.y = m_rot.m[2][1] * 5.0f + m_position.y;
+	m_tarpos.z = m_rot.m[2][2] * 5.0f + m_position.z;
 }
 void Player::Avoid() {
 	//エネミーからプレイヤーのベクトル
@@ -151,12 +153,20 @@ void Player::Avoid() {
 	if (m_Avoidf&&g_pad->IsTrigger(enButtonB))
 	{
 		m_rot.MakeRotationFromQuaternion(m_enemy->GetRotation());
-		m_position.x = -m_rot.m[2][0] * 40.0 + m_enemy->GetPosition().x;
-		m_position.z = -m_rot.m[2][2] * 40.0 + m_enemy->GetPosition().z;
+		m_position.x = -m_rot.m[2][0] * 40.0f + m_enemy->GetPosition().x;
+		m_position.z = -m_rot.m[2][2] * 40.0f + m_enemy->GetPosition().z;
 		m_charaCon.SetPosition(m_position);
 
 	}
 
+}
+void Player::Action() {
+	CVector3 SpriteToPos = m_position - m_background->GetSpritePos();
+	float StoPLen=SpriteToPos.Length();
+	if (StoPLen<=10.0f&&g_pad->IsTrigger(enButtonB))
+	{ 
+
+	}
 }
 void Player::Update()
 {
@@ -174,7 +184,7 @@ void Player::Update()
 		m_model.SetSpecPow(0.0f);
 	}
 	m_model.UpdateWorldMatrix(m_position, qRot,CVector3 { 0.1f,0.1f,0.1f });
-	m_sppos.y = 1.0;
+	m_sppos.y = 1.0f;
 	m_sprite.Update(m_sppos, CQuaternion::Identity(), CVector3::One());
 }
 
