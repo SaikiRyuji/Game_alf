@@ -119,6 +119,9 @@ void Player::Move() {
 		m_moveSpeed.y -= gravity;
 	}
 	m_position = m_charaCon.Execute(GameTime().GetFrameDeltaTime(), m_moveSpeed);
+	if (m_position.y<= -400.0f) {
+		m_position = { 0.0f,30.0f,0.0f };
+	}
 }
 void Player::Rotation() {
 
@@ -190,9 +193,17 @@ void Player::Update()
 
 void Player::Draw()
 {
+	m_renderModel = 1;
 	m_model.Draw(
 		MainCamera().GetViewMatrix(), 
-		MainCamera().GetProjectionMatrix()
+		MainCamera().GetProjectionMatrix(),
+		m_renderModel
+	);
+	m_renderModel = 0;
+	m_model.Draw(
+		MainCamera().GetViewMatrix(),
+		MainCamera().GetProjectionMatrix(),
+		m_renderModel
 	);
 }
 void Player::PostDraw() {

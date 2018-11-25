@@ -16,13 +16,15 @@ Game::~Game()
 }
 
 bool Game::Start() {
-	//プレイヤ-
+
 	m_fade = FindGO<Fade>("Fade");
-	Player* player = nullptr;
-	player = NewGO<Player>(0, "Player");
+	
 
 	BackGround* background = nullptr;
 	background = NewGO<BackGround>(0, "background");
+	//プレイヤ-
+	Player* player = nullptr;
+	player = NewGO<Player>(0, "Player");
 
 	CGameCamera* Camera = nullptr;
 	Camera = NewGO<CGameCamera>(0, "Camera");
@@ -59,5 +61,4 @@ void Game::Update() {
 }
 
 void Game::Draw() {
-
 }

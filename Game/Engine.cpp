@@ -80,6 +80,28 @@ bool CEngine::Init(SInitParam& initParam)
 	m_graphicsEngine.Init(m_hWnd);
 	//物理初期化
 	m_physicsWorld.Init();
+
+	//深度ステンシルステート作成
+	D3D11_DEPTH_STENCIL_DESC desc = { 0 };
+	desc.DepthEnable = true;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	desc.DepthFunc = D3D11_COMPARISON_GREATER;
+	desc.StencilEnable = false;
+	desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	//D3Dデバイスを取得。
+	auto d3ddevice = GfxEngine().GetD3DDevice();
+	//デプスステンシルステートを作成。
+	d3ddevice->CreateDepthStencilState(&desc, &m_depthStencilState);
+
 	
 	return true;
 }
@@ -105,6 +127,9 @@ void CEngine::GameLoop()
 void CEngine::Update() {
 	//描画開始。
 	m_graphicsEngine.BegineRender();
+
+	//なくてもできている？
+	//m_graphicsEngine.GetD3DDeviceContext()->OMSetDepthStencilState(m_depthStencilState, 0);
 	//ゲームパッドの更新。	
 	for (auto& pad : g_pad) {
 		pad.Update();

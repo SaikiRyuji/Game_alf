@@ -27,6 +27,9 @@ public:
 	//ステート変更
 	//State　ステート
 	void ChangeState(State state);
+	//エネミーの様々な拡大率
+	CVector3 Scale();
+
 	//エネミー座標取得
 	CVector3 GetPosition() {
 		return m_position;
@@ -73,6 +76,14 @@ public:
 	void RotMultiply(CVector3 rot) {
 		m_rotation.Multiply(rot);
 	}
+	int GetRenderModel() {
+		return m_renderModel;
+	}
+	////拡大率を設定
+	////CVector3		拡大率
+	//void SetScale(CVector3 scale) {
+	//	m_Scale = scale;
+	//}
 	//FindGoで見つけたプレイヤー取得
 	Player* GetPlayer() {
 		return m_player;
@@ -86,6 +97,8 @@ private:
 	CVector3 m_position = CVector3::Zero();				//座標
 	CQuaternion m_rotation = CQuaternion::Identity();	//回転
 	CharacterController m_charaCon;						//キャラクターコントローラ
+	CVector3 m_Scale;										//拡大率
 	Player* m_player=nullptr;							//プレイヤーポインタ
+	int m_renderModel = 0;
 };
 

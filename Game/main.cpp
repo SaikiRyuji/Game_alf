@@ -25,6 +25,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	initParam.frameBufferWidth = 1280;
 	initParam.frameBufferHeight = 720;
 	
+
 	//ゲームループ。
 	if (Engine().Init(initParam) == true) {
 		//試し

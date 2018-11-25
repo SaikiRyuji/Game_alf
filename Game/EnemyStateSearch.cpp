@@ -66,7 +66,7 @@ void EnemyStateSearch::StateUpdate() {
 	m_enemy->GetModel().UpdateWorldMatrix(
 		m_enemy->GetPosition(), 
 		m_enemy->GetRotation(),
-		CVector3{ 0.1f,0.1f,0.1f });
+		m_enemy->Scale());
 	
 	//試作ステートチェンジ
 	//プレイヤの視野角判定
@@ -79,6 +79,7 @@ void EnemyStateSearch::StateUpdate() {
 void EnemyStateSearch::StateDraw() {
 	m_enemy->GetModel().Draw(
 		MainCamera().GetViewMatrix(),
-		MainCamera().GetProjectionMatrix()
+		MainCamera().GetProjectionMatrix(),
+		m_enemy->GetRenderModel()
 );
 }

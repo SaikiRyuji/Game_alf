@@ -61,5 +61,5 @@ private:
 	float m_friction;							//摩擦力
 	Enemy*m_enemy=nullptr;								//エネミーポインタ
 	BackGround*m_background = nullptr;
-
+	int m_renderModel = 0;
 };

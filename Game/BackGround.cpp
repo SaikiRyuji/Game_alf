@@ -44,7 +44,8 @@ void BackGround::Update() {
 void BackGround::Draw() {
 	m_skinModel.Draw(
 		MainCamera().GetViewMatrix(),
-		MainCamera().GetProjectionMatrix()
+		MainCamera().GetProjectionMatrix(),
+		m_renderModel
 	);
 }
 void BackGround::PostDraw() {

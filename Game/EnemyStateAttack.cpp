@@ -33,11 +33,13 @@ void EnemyStateAttack::StateUpdate() {
 	m_enemy->GetModel().UpdateWorldMatrix(
 		m_enemy->GetPosition(), 
 		qRot,
-		CVector3{ 0.1f,0.1f,0.1f });
+		m_enemy->Scale());
 }
 
 void EnemyStateAttack::StateDraw() {
 	m_enemy->GetModel().Draw(
 		MainCamera().GetViewMatrix(),
-		MainCamera().GetProjectionMatrix());
+		MainCamera().GetProjectionMatrix(),
+		m_enemy->GetRenderModel()
+	);
 }

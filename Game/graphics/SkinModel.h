@@ -51,7 +51,7 @@ public:
 	*@param[in]	projMatrix		プロジェクション行列。
 	*  カメラ座標系の3Dモデルをスクリーン座標系に変換する行列です。
 	*/
-	void Draw(CMatrix viewMatrix, CMatrix projMatrix);
+	void Draw(CMatrix viewMatrix, CMatrix projMatrix,int renderMode);
 	//ライトの更新
 	void LightUpdate();
 	/*!

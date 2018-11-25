@@ -16,6 +16,6 @@ private:
 	EnState m_state;
 	Fade*m_fade=nullptr;
 	float m_waitTimer;
-	
+	ID3D11DepthStencilState* m_depthStencilState;
 };
 

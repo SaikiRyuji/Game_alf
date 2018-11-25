@@ -23,6 +23,7 @@ bool Enemy::Start() {
 		1.0f,		//高さ
 		m_position//初期位置
 	);
+	m_Scale = { 0.1f,0.1f,0.1f };
 	InitAnimation();
 	m_player = FindGO<Player>("Player");
 	return true;
@@ -40,6 +41,11 @@ void Enemy::InitAnimation() {
 	m_animation.Init(m_model, m_animClips, enAnimationClip_Num);
 
 }
+CVector3 Enemy::Scale() {
+
+	return m_Scale;
+}
+
 //ステートの切り替えの関数。
 void Enemy::ChangeState(State state) {
 	//現在の状態を破棄する。

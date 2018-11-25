@@ -25,5 +25,6 @@ private:
 	CShaderResourceView m_texture;				//テクスチャ
 	CSprite m_sprite;							//スプライト
 	CVector3 m_SpritePos=CVector3::Zero();		//スプライト座標
+	int m_renderModel = 0;
 };
 

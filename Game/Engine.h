@@ -56,6 +56,7 @@ public:
 	CPhysicsWorld			m_physicsWorld;								//!<物理ワールド。
 	int						m_screenWidth = 0;							//!<スクリーンの幅。
 	int						m_screenHeight = 0;							//!<スクリーンの高さ。
+	ID3D11DepthStencilState* m_depthStencilState;
 };
 /*!
 * @brief	Engineのインスタンスを取得。
