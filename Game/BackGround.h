@@ -9,8 +9,8 @@ public:
 	~BackGround();
 	bool Start()override;
 	void Update()override;
-	void Draw()override;
-	void PostDraw()override;
+	void Render()override;
+	void PostRender()override;
 
 	CVector3 GetSpritePos(){
 		return m_SpritePos;

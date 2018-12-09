@@ -63,8 +63,8 @@ public:
 	}
 public:
 	void Update() override final;
-	void Draw()override final;
-	void PostDraw() override final;
+	void Render()override final;
+	void PostRender() override final;
 private:
 	bool m_isDraw3D = false;		//!<3D空間で描画する？
 	CShaderResourceView m_texture;	//!<テクスチャ。

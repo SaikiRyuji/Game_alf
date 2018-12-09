@@ -191,22 +191,20 @@ void Player::Update()
 	m_sprite.Update(m_sppos, CQuaternion::Identity(), CVector3::One());
 }
 
-void Player::Draw()
+void Player::Render()
 {
-	m_renderModel = 1;
 	m_model.Draw(
 		MainCamera().GetViewMatrix(), 
 		MainCamera().GetProjectionMatrix(),
-		m_renderModel
+		enRenderSilhouette
 	);
-	m_renderModel = 0;
 	m_model.Draw(
 		MainCamera().GetViewMatrix(),
 		MainCamera().GetProjectionMatrix(),
-		m_renderModel
+		enRenderMode_Normal
 	);
 }
-void Player::PostDraw() {
+void Player::PostRender() {
 	if (g_pad->IsPress(enButtonLB2)) {
 		m_sprite.Draw(
 			MainCamera2D().GetViewMatrix(),

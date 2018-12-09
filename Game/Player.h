@@ -10,8 +10,8 @@ public:
 	bool Start()override;
 	void Update()override;
 	//描画処理
-	void Draw()override;
-	void PostDraw()override;
+	void Render()override;
+	void PostRender()override;
 	//移動処理
 	void Move();
 	//回転処理
@@ -61,5 +61,4 @@ private:
 	float m_friction;							//摩擦力
 	Enemy*m_enemy=nullptr;								//エネミーポインタ
 	BackGround*m_background = nullptr;
-	int m_renderModel = 0;
 };

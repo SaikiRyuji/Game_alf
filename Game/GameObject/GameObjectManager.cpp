@@ -18,16 +18,16 @@ void GameObjectManager::Execute() {
 			obj->UpdateWrapper();
 		}
 	}
-	//DrawWrapperŠÖ”‚ðŒÄ‚Ô
+	//RenderWrapperŠÖ”‚ðŒÄ‚Ô
 	for (GameObjectList objList : m_gameObjectListArray) {
 		for (GameObject* obj : objList) {
-			obj->DrawWrapper();
+			obj->RenderWrapper();
 		}
 	}
-	//PostDrawWrapperŠÖ”‚ðŒÄ‚Ô
+	//PostRenderWrapperŠÖ”‚ðŒÄ‚Ô
 	for (GameObjectList objList : m_gameObjectListArray) {
 		for (GameObject* obj : objList) {
-			obj->PostDrawWrapper();
+			obj->PostRenderWrapper();
 		}
 	}
 }

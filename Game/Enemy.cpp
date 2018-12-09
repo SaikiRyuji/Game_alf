@@ -65,6 +65,6 @@ void Enemy::Update() {
 	m_pState->StateUpdate();
 }
 
-void Enemy::Draw() {
+void Enemy::Render() {
 	m_pState->StateDraw();
 }

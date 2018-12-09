@@ -41,14 +41,14 @@ void BackGround::Update() {
 
 }
 
-void BackGround::Draw() {
+void BackGround::Render() {
 	m_skinModel.Draw(
 		MainCamera().GetViewMatrix(),
 		MainCamera().GetProjectionMatrix(),
-		m_renderModel
+		enRenderMode_Normal
 	);
 }
-void BackGround::PostDraw() {
+void BackGround::PostRender() {
 	m_sprite.Draw(
 		MainCamera().GetViewMatrix(),
 		MainCamera().GetProjectionMatrix()

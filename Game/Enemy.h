@@ -21,7 +21,7 @@ public:
 	bool Start()override;
 	void Update()override;
 	//描画処理
-	void Draw() override;
+	void Render() override;
 	//アニメーション初期化
 	void InitAnimation();
 	//ステート変更
@@ -76,7 +76,7 @@ public:
 	void RotMultiply(CVector3 rot) {
 		m_rotation.Multiply(rot);
 	}
-	int GetRenderModel() {
+	EnRenderMode GetRenderModel() {
 		return m_renderModel;
 	}
 	////拡大率を設定
@@ -99,6 +99,6 @@ private:
 	CharacterController m_charaCon;						//キャラクターコントローラ
 	CVector3 m_Scale;										//拡大率
 	Player* m_player=nullptr;							//プレイヤーポインタ
-	int m_renderModel = 0;
+	EnRenderMode m_renderModel = enRenderMode_Normal;
 };
 

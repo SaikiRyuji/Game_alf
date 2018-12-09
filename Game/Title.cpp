@@ -32,7 +32,7 @@ void Title::Update() {
 		}
 	}
 }
-void Title::Draw() {
+void Title::Render() {
 	m_sprite.Draw(
 		MainCamera2D().GetViewMatrix(),
 		MainCamera2D().GetProjectionMatrix()

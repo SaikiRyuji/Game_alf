@@ -6,6 +6,16 @@
 /*!
  *@brief	グラフィックスエンジン。
  */
+ /// <summary>
+ /// レンダリングモード。
+ /// </summary>
+enum EnRenderMode {
+	enRenderMode_Invalid,			//不正なレンダリングモード。
+	enRenderSilhouette,				//シルエットレンダリング
+	enRenderMode_CreateShadowMap,	//シャドウマップ生成。
+	enRenderMode_Normal,			//通常レンダリング。
+	enRenderMode_Num,				//レンダリングモードの数。
+};
 class GraphicsEngine 
 {
 public:

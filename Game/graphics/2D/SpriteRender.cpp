@@ -22,13 +22,13 @@ void CSpriteRender::Update()
 	m_sprite.SetTexture(m_texture);
 	m_sprite.Update(m_position, m_rotation, m_scale, m_pivot);
 }
-void CSpriteRender::Draw()
+void CSpriteRender::Render()
 {
 	if (m_isDraw3D == true) {
 		//m_sprite.Draw( rc,MainCamera().GetViewMatrix(), MainCamera().GetProjectionMatrix());
 	}
 }
-void CSpriteRender::PostDraw()
+void CSpriteRender::PostRender()
 {
 	if (m_isDraw3D == false) {
 		//m_sprite.Draw(rc,MainCamera2D().GetViewMatrix(), MainCamera2D().GetProjectionMatrix());

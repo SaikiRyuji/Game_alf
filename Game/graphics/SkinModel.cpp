@@ -147,7 +147,7 @@ void SkinModel::LightUpdate()
 		m_Light.specPow = min(100.0f, m_Light.specPow + 0.5f);
 	}
 }
-void SkinModel::Draw(CMatrix viewMatrix, CMatrix projMatrix,int renderMode)
+void SkinModel::Draw(CMatrix viewMatrix, CMatrix projMatrix, EnRenderMode renderMode)
 {
 	DirectX::CommonStates state(GfxEngine().GetD3DDevice());
 

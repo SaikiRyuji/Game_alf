@@ -7,7 +7,7 @@ public:
 	~Title();
 	bool Start()override;
 	void Update()override;
-	void Draw()override;
+	void Render()override;
 private:
 	bool m_isWaitFadeout = false;
 	Fade*m_fade = nullptr;

@@ -6,7 +6,7 @@ public:
 	~Fade();
 	bool Start() override;
 	void Update() override;
-	void PostDraw() override;
+	void PostRender() override;
 	void StartFadeIn()
 	{
 		m_state = enState_FadeIn;

@@ -15,7 +15,7 @@ protected:
 	Shader m_psSilhouette;		//シルエット描画用のピクセルシェーダー。
 	bool isSkining;
 	ID3D11ShaderResourceView* m_albedoTex = nullptr;
-	bool m_renderMode = 0;
+	EnRenderMode m_renderMode = enRenderMode_Invalid;	//レンダリングモード。
 	ID3D11DepthStencilState* m_silhouettoDepthStepsilState = nullptr;	//シルエット描画用のデプスステンシルステート。
 
 
@@ -53,7 +53,7 @@ public:
 	{
 		return wcscmp(name, m_materialName.c_str()) == 0;
 	}
-	void SetRenderMode(int renderMode)
+	void SetRenderMode(EnRenderMode renderMode)
 	{
 		m_renderMode = renderMode;
 	}

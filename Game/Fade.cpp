@@ -39,7 +39,7 @@ void Fade::Update()
 	}
 	m_sprite.Update(CVector3::Zero(), CQuaternion::Identity(), CVector3::One());
 }
-void Fade::PostDraw()
+void Fade::PostRender()
 {
 	if (m_currentAlpha > 0.0f) {
 		m_sprite.SetMulColor({ 1.0f,1.0f,1.0f,m_currentAlpha });

@@ -19,7 +19,7 @@ public:
 	/*!
 	*@brief	描画
 	*/
-	virtual void Draw()
+	virtual void Render()
 	{
 	}
 	/*!
@@ -27,7 +27,7 @@ public:
 	*@details
 	* ポストエフェクトの後で実行されます。HUDなどポストエフェクトの影響を受けたくない描画物はここでレンダリングしてください。
 	*/
-	virtual void PostDraw() {
+	virtual void PostRender() {
 	}
 	/*!
 	*@brief	インスタンスが生成された直後に呼ばれる関数。
@@ -83,17 +83,17 @@ public:
 			Update();
 		}
 	}
-	//Draw関数を呼ぶ
-	void DrawWrapper()
+	//Render関数を呼ぶ
+	void RenderWrapper()
 	{
 		if (m_isActive && m_isStart && !m_isDead && !m_isRegistDeadList) {
-			Draw();
+			Render();
 		}
 	}
-	void PostDrawWrapper()
+	void PostRenderWrapper()
 	{
 		if (m_isActive && m_isStart && !m_isDead && !m_isRegistDeadList) {
-			PostDraw();
+			PostRender();
 		}
 	}
 	friend class GameObjectManager;
