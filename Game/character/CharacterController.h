@@ -48,8 +48,8 @@ public:
 	{
 		m_position = pos;
 	}
-	void Set2ndJump() {
-		m_is2ndJump = true;
+	void Set2ndJump(bool tf) {
+		m_is2ndJump = tf;
 	}
 	/*!
 		* @brief	ƒWƒƒƒ“ƒv’†‚©”»’è

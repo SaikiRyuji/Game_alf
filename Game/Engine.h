@@ -100,3 +100,19 @@ static inline void BeginGPUEvent(const wchar_t* name)
 static inline void EndGPUEvent()
 {
 }
+/*!
+* @brief	コリジョンのデバッグ表示を有効にする。
+*@param[in]	colliObj	コリジョンオブジェクト。
+*/
+static inline void SetDrawPhysicsCollisionEnable()
+{
+	PhysicsWorld().SetDebugDrawMode(1);
+}
+/*!
+* @brief	コリジョンのデバッグ表示を有効にする。
+*@param[in]	colliObj	コリジョンオブジェクト。
+*/
+static inline void SetDrawPhysicsCollisionDisable()
+{
+	PhysicsWorld().SetDebugDrawMode(0);
+}

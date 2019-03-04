@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "GameCamera.h"
-
+#include"Player.h"
+#include"Player2D.h"
+#include"BackGround.h"
+#include"GameCamera2D.h"
 
 CGameCamera::CGameCamera()
 {
@@ -14,6 +17,8 @@ CGameCamera::~CGameCamera()
 bool CGameCamera::Start()
 {
 	m_player = FindGO<Player>("Player");
+	m_pl2D = FindGO<Player2D>("Player2D");
+	m_background = FindGO<BackGround>("background");
 	m_CamPos = m_player->GetPosition();
 	m_CamPos.y += 20.0f;
 	m_CamPos.z -= 50.0f;
@@ -26,24 +31,33 @@ bool CGameCamera::Start()
 	m_springCamera.Init(
 		MainCamera(),		//ばねカメラの処理を行うカメラを指定する。
 		500.0f,			//カメラの移動速度の最大値。
-		true,				//カメラと地形とのあたり判定を取るかどうかのフラグ。trueだとあたり判定を行う。
+		false,				//カメラと地形とのあたり判定を取るかどうかのフラグ。trueだとあたり判定を行う。
 		1.0f				//カメラに設定される球体コリジョンの半径。第３引数がtrueの時に有効になる。
 	);
 	return true;
+}
+void CGameCamera::Camera2Dto3D(CVector3 pos) {
+	CVector3 plpos=CVector3::Zero();
+	plpos = m_player->GetPosition();
+	plpos.y += 20.0f;
+	pos.y = plpos.y;
+	m_springCamera.SetPosition(pos);
+	m_springCamera.SetTarget(plpos);
+	m_springCamera.Update();
 }
 void CGameCamera::SetAvoidRot() {
 
 }
 void CGameCamera::Update() {
-
+	CVector3 PlPos = m_player->GetPosition();
 	CVector3 toCameraPos = CVector3::Zero();
 	toCameraPos = m_springCamera.GetPosition() - m_springCamera.GetTarget();
 	float height = toCameraPos.y;
 	toCameraPos.y = 0.0f;
 	float toCameraPosLen = toCameraPos.Length();
 	toCameraPos.Normalize();
-	CVector3 target = m_player->GetPosition();
-	target.y += 10.0f;
+	CVector3 target = PlPos;
+	//target.y += 10.0f;
 	CVector3 toNewCameraPos = CVector3::Zero();
 	toNewCameraPos = m_springCamera.GetPosition() - target;
 	toNewCameraPos.y = 0.0f;
@@ -89,24 +103,39 @@ void CGameCamera::Update() {
 	}
 	pos = CVector3::Zero();
 
-	m_rot.MakeRotationFromQuaternion(qRot);
-
 	//視点を計算する
 	if (!(x == 0 && y == 0)) {
 		pos = target + toNewCameraPos;
 		m_springCamera.SetTarget(target);
 		m_springCamera.SetPosition(pos);
 	}
-	//照準
-	if (g_pad->IsPress(enButtonLB2)) {
-	/*	CVector3 vec;
-		vec = MainCamera().GetForward()*20.0f;
-		target += vec;*/
-		target = m_player->GetTarPosition();
-		pos = target + toNewCameraPos;
-		m_springCamera.SetTarget(target);
-		m_springCamera.SetPosition(pos);
-	}
 	//バネカメラの更新。
 	m_springCamera.Update();
+}
+void CGameCamera::Notify2DGame() {
+	m_camera2D = FindGO<GameCamera2D>("Camera2D");
+	m_camera2D->Notify2DGame();
+	m_camera2D->Start();
+	//バネカメラをリフレッシュ。
+	m_springCamera.Refresh();
+	//バネカメラを非アクティブにする。
+	m_isActive = false;
+}
+void CGameCamera::NotifyGameOver() {
+	//バネカメラをリフレッシュ。
+	m_springCamera.Refresh();
+	//バネカメラを非アクティブにする。
+	m_isActive = false;
+}
+void CGameCamera::NotifyGameClear() {
+	//バネカメラをリフレッシュ。
+	m_springCamera.Refresh();
+	//バネカメラを非アクティブにする。
+	m_isActive = false;
+}
+void CGameCamera::Notify3DGame() {
+	//バネカメラをリフレッシュ。
+	m_springCamera.Refresh();
+	//バネカメラをアクティブにする。
+	m_isActive = true;
 }

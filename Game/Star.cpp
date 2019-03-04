@@ -20,6 +20,7 @@ bool Star::Start(CVector3 pos, CQuaternion rot) {
 };
 
 void Star::Update() {
+
 	CQuaternion Rot;
 	Rot.SetRotationDeg(CVector3::AxisY(), 2.0f);
 	m_rotation.Multiply(Rot);

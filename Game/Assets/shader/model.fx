@@ -26,6 +26,7 @@ cbuffer VSPSCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
+	int IsUV;
 };
 static const int DirNum = 2;
 struct SDirectionLight{
@@ -36,6 +37,7 @@ cbuffer LightCb : register(b0) {
 	SDirectionLight		directionLight;		//ディレクションライト。
 	float3				eyePos;				//カメラの視点。
 	float				specPow;			//スペキュラライトの絞り。
+	int					islight;			//ライトを当てる？フラグ
 };
 
 /////////////////////////////////////////////////////////////
@@ -157,28 +159,34 @@ float4 PSMain( PSInput In ) : SV_Target0
 {
 	//albedoテクスチャからカラーをフェッチする。
 	float4 albedoColor = g_albedoTexture.Sample(g_Sampler, In.TexCoord);
-	//ディレクションライトの拡散反射光を計算する。
-	float3 lig = { 0.0f,0.0f,0.0f };
-	for (int i = 0; i < DirNum; i++) {
-		lig += max(0.0f, dot(In.Normal * -1.0f, directionLight.dligDirection[i])) * directionLight.dligColor[i].xyz;
-		// ライトを当てる面から視点に伸びるベクトルtoEyeDirを求める。
-		float3 toEyeDir = normalize(eyePos - In.worldPos);
+	float4 finalColor= float4(0.0f, 0.0f, 0.0f, 1.0f);
+	if (islight == 1) {
+		//ディレクションライトの拡散反射光を計算する。
+		float3 lig = { 0.0f,0.0f,0.0f };
+		for (int i = 0; i < DirNum; i++) {
+			lig += max(0.0f, dot(In.Normal * -1.0f, directionLight.dligDirection[i])) * directionLight.dligColor[i].xyz;
+			// ライトを当てる面から視点に伸びるベクトルtoEyeDirを求める。
+			float3 toEyeDir = normalize(eyePos - In.worldPos);
 
-		//toEyeDirの反射ベクトルを求める。
-		float3 reflectEyeDir = -toEyeDir + 2 * dot(In.Normal, toEyeDir) * In.Normal;
+			//toEyeDirの反射ベクトルを求める。
+			float3 reflectEyeDir = -toEyeDir + 2 * dot(In.Normal, toEyeDir) * In.Normal;
 
-		//スペキュラの強さを計算
-		float t = max(0.0f, dot(-directionLight.dligDirection[i], reflectEyeDir));
+			//スペキュラの強さを計算
+			float t = max(0.0f, dot(-directionLight.dligDirection[i], reflectEyeDir));
 
-		//pow関数を使って、スペキュラを絞る
-		float3 specLig = pow(t, specPow) * directionLight.dligColor[i].xyz;
+			//pow関数を使って、スペキュラを絞る
+			float3 specLig = pow(t, specPow) * directionLight.dligColor[i].xyz;
 
-		//スペキュラ反射が求まったら、ligに加算する。
-		//鏡面反射を反射光に加算する。
-		lig += specLig;
+			//スペキュラ反射が求まったら、ligに加算する。
+			//鏡面反射を反射光に加算する。
+			lig += specLig;
+		}
+		finalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+		finalColor.xyz = albedoColor.xyz * lig;
 	}
-	float4 finalColor = float4( 0.0f, 0.0f, 0.0f, 1.0f );
-	finalColor.xyz = albedoColor.xyz * lig;
+	else {
+		finalColor.xyz = albedoColor.xyz;
+	}
 	return finalColor; 
 }
 //--------------------------------------------------------------------------------------

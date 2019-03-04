@@ -47,6 +47,8 @@ void CPhysicsWorld::Init()
 		);
 
 	dynamicWorld->setGravity(btVector3(0, -10, 0));
+	m_debugDraw.Init();
+	dynamicWorld->setDebugDrawer(&m_debugDraw);
 }
 void CPhysicsWorld::Update()
 {
@@ -59,4 +61,11 @@ void CPhysicsWorld::AddRigidBody(RigidBody& rb)
 void CPhysicsWorld::RemoveRigidBody(RigidBody& rb)
 {
 	dynamicWorld->removeRigidBody(rb.GetBody());
+}
+
+void CPhysicsWorld::DebubDrawWorld()
+{
+	m_debugDraw.BeginDraw();
+	dynamicWorld->debugDrawWorld();
+	m_debugDraw.EndDraw();
 }

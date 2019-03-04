@@ -2,6 +2,8 @@
 #include "character/CharacterController.h"
 class Enemy;
 class BackGround;
+class CGameCamera;
+class GameCamera2D;
 class Player :public GameObject
 {
 public:
@@ -34,6 +36,22 @@ public:
 	CVector3 GetTarPosition() {
 		return m_tarpos;
 	}
+	bool Get2DFlag() {
+		return m_Flag2D;
+	}
+	CharacterController& GetCharaCon() {
+		return m_charaCon;
+	}
+	void SetPosition2D(CVector3 position) {
+		m_position.x = position.x-1.0;
+		m_position.y = position.y;
+	}
+	void Set2DFlag(bool tf) {
+		m_Flag2D = tf;
+	}
+	void SetMoveSped(CVector3 speed) {
+		m_moveSpeed = speed;
+	}
 private:
 	enum EnAnimationClip {
 		enAnimationClip_idle,		//待機アニメーション。
@@ -45,6 +63,7 @@ private:
 		enAnimationClip_item,		//アイテム使用アニメーション。
 		enAnimationClip_Num,		//アニメーションクリップの数。
 	};
+	bool m_Flag2D = false;								//2D状態かどうか？
 	CVector3 m_tarpos = CVector3::Zero();
 	AnimationClip m_animClips[enAnimationClip_Num];		//アニメーションクリップ。
 	Animation m_animation;								//アニメーション
@@ -61,4 +80,6 @@ private:
 	float m_friction;							//摩擦力
 	Enemy*m_enemy=nullptr;								//エネミーポインタ
 	BackGround*m_background = nullptr;
+	CGameCamera*m_gamecamera = nullptr;
+	GameCamera2D*m_Camera2D = nullptr;
 };

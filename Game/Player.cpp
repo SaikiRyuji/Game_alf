@@ -2,6 +2,9 @@
 #include "Player.h"
 #include"Enemy.h"
 #include"BackGround.h"
+#include"GameCamera.h"
+#include"GameCamera2D.h"
+#include"Player2D.h"
 Player::Player()
 {
 }
@@ -12,7 +15,7 @@ Player::~Player()
 }
 
 bool Player::Start() {
-	m_position = { 0.0f,1000.0f,0.0f };
+	m_position = { 0.0f,100.0f,0.0f };
 	m_charaCon.Init(
 		2.0,		//半径
 		1.0f,		//高さ
@@ -29,6 +32,7 @@ bool Player::Start() {
 	m_animation.Play(enAnimationClip_idle);
 	m_enemy = FindGO<Enemy>("Enemy");
 	m_background = FindGO<BackGround>("background");
+	m_gamecamera = FindGO<CGameCamera>("Camera");
 	return true;
 }
 void Player::InitAnimation() {
@@ -91,7 +95,7 @@ void Player::Move() {
 	//二段ジャンプ
 	if (g_pad->IsTrigger(enButtonA) && m_charaCon.IsJump()&&!m_charaCon.Is2ndJump()) {
 		m_moveSpeed.y += jump;
-		m_charaCon.Set2ndJump();
+		m_charaCon.Set2ndJump(true);
 	}
 	//摩擦
 	CVector3 masa = m_moveSpeed;
@@ -120,7 +124,7 @@ void Player::Move() {
 	}
 	m_position = m_charaCon.Execute(GameTime().GetFrameDeltaTime(), m_moveSpeed);
 	if (m_position.y<= -400.0f) {
-		m_position = { 0.0f,30.0f,0.0f };
+		m_position = { 0.0f,50.0f,0.0f };
 	}
 }
 void Player::Rotation() {
@@ -153,56 +157,76 @@ void Player::Avoid() {
 	}
 
 	//まだ試作段階　　/エネミーの後ろに移動する処理
-	if (m_Avoidf&&g_pad->IsTrigger(enButtonB))
+	/*if (m_Avoidf&&g_pad->IsTrigger(enButtonB))
 	{
 		m_rot.MakeRotationFromQuaternion(m_enemy->GetRotation());
 		m_position.x = -m_rot.m[2][0] * 40.0f + m_enemy->GetPosition().x;
 		m_position.z = -m_rot.m[2][2] * 40.0f + m_enemy->GetPosition().z;
 		m_charaCon.SetPosition(m_position);
 
-	}
+	}*/
 
 }
 void Player::Action() {
-	CVector3 SpriteToPos = m_position - m_background->GetSpritePos();
+	m_Flag2D = false;
+	
+	/*CVector3 SpriteToPos = m_position - m_background->GetSpritePos();
 	float StoPLen=SpriteToPos.Length();
 	if (StoPLen<=10.0f&&g_pad->IsTrigger(enButtonB))
 	{ 
 
-	}
+	}*/
 }
 void Player::Update()
 {
-	AnimataionControl();
-	Move();
-	Rotation();
-	Avoid();
-
-	CQuaternion qRot=CQuaternion::Identity();
-	qRot.SetRotationDeg(CVector3::AxisX(), 90.0f);
-	qRot.Multiply(m_rotation, qRot);
-	//ワールド行列の更新。
-	if (g_pad->IsTrigger(enButtonDown))
-	{
-		m_model.SetSpecPow(0.0f);
+	if (!m_background->IsHit(m_charaCon)) {
+		AnimataionControl();
+		Move();
+		Rotation();
+		//Avoid();
+		Action();
+		CQuaternion qRot = CQuaternion::Identity();
+		qRot.SetRotationDeg(CVector3::AxisX(), 90.0f);
+		qRot.Multiply(m_rotation, qRot);
+		//ワールド行列の更新。
+		if (g_pad->IsTrigger(enButtonDown))
+		{
+			m_model.SetSpecPow(0.0f);
+		}
+		m_model.UpdateWorldMatrix(m_position, qRot, CVector3{ 0.1f,0.1f,0.1f });
+		m_sppos.y = 1.0f;
+		m_sprite.Update(m_sppos, CQuaternion::Identity(), CVector3::One());
 	}
-	m_model.UpdateWorldMatrix(m_position, qRot,CVector3 { 0.1f,0.1f,0.1f });
-	m_sppos.y = 1.0f;
-	m_sprite.Update(m_sppos, CQuaternion::Identity(), CVector3::One());
+	//ゴーストに当たった
+	if (m_background->IsHit(m_charaCon) && !m_Flag2D) {
+		//2D状態に入る
+		m_Flag2D = true;
+		m_moveSpeed = CVector3::Zero();
+		m_charaCon.Set2ndJump(true);
+		if (m_Camera2D==nullptr)
+		{
+			m_Camera2D = NewGO<GameCamera2D>(0, "Camera2D");
+		}
+		Player2D*pl2D = FindGO<Player2D>("Player2D");
+		pl2D->SetPosition(m_background->GetGhostPos());
+		m_gamecamera->Notify2DGame();
+	}
 }
 
 void Player::Render()
 {
-	m_model.Draw(
-		MainCamera().GetViewMatrix(), 
-		MainCamera().GetProjectionMatrix(),
-		enRenderSilhouette
-	);
-	m_model.Draw(
-		MainCamera().GetViewMatrix(),
-		MainCamera().GetProjectionMatrix(),
-		enRenderMode_Normal
-	);
+	if (m_Flag2D != true) {
+		m_model.Draw(
+			MainCamera().GetViewMatrix(),
+			MainCamera().GetProjectionMatrix(),
+			enRenderSilhouette
+		);
+		m_model.Draw(
+			MainCamera().GetViewMatrix(),
+			MainCamera().GetProjectionMatrix(),
+			enRenderMode_Normal
+		);
+	}
 }
 void Player::PostRender() {
 	if (g_pad->IsPress(enButtonLB2)) {

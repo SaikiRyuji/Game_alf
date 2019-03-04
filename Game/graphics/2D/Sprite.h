@@ -46,7 +46,10 @@ public:
 	*@param[in]	projMatrix		プロジェクション行列。
 	*/
 	void Draw(const CMatrix& viewMatrix, const CMatrix& projMatrix);
+	CShaderResourceView* GetTex() {
+		return m_textureSRV;
 
+	}
 private:
 	struct SSpriteCB {
 		CMatrix WVP;		//ワールドビュープロジェクション行列。

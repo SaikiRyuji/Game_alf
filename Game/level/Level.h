@@ -7,9 +7,19 @@ class MapChip;
 * @brief	オブジェクト名。
 */
 struct LevelObjectData {
+private:
+	bool tf = false;
+public:
 	CVector3 position;		//<座標。
 	CQuaternion rotation;	//!<回転。
+	CVector3 scale;			//!<拡大率。
 	const wchar_t* name;	//!<名前。
+	bool EqualObjectName(const wchar_t* levelname) {
+		if (wcscmp(name, levelname) == 0) {
+			tf = true;
+		}
+		return tf;
+	}
 };
 /*!
  * @brief	レベル

@@ -27,6 +27,7 @@
 		void* pSrcIndexBuffer)
 	{
 		Release();
+		m_topology = topology;
 		bool result = m_vertexBuffer.Create(numVertex, vertexStride, pSrcVertexBuffer);
 		if (!result) {
 			TK_WARNING("プリミティブの作成に失敗しました。");
@@ -58,4 +59,20 @@
 		//描画。
 		deviceContext->DrawIndexed(m_indexBuffer.GetNumIndex(), 0, 0);
 
+	}
+	void CPrimitive::Draw(ID3D11DeviceContext*rc,int numVertex)
+	{
+		UINT offset = 0;
+		UINT stride = m_vertexBuffer.GetStride();
+		rc->IASetVertexBuffers(
+			0,
+			1,
+			&m_vertexBuffer.GetBody(),
+			&stride,
+			&offset
+		);
+		//プリミティブのトポロジーを設定。
+		rc->IASetPrimitiveTopology(m_topology);
+		//描画。
+		rc->Draw(numVertex, 0);
 	}

@@ -24,6 +24,7 @@ void GameObjectManager::Execute() {
 			obj->RenderWrapper();
 		}
 	}
+	PhysicsWorld().DebubDrawWorld();
 	//PostRenderWrapperŠÖ”‚ğŒÄ‚Ô
 	for (GameObjectList objList : m_gameObjectListArray) {
 		for (GameObject* obj : objList) {

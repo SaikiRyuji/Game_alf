@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Skeleton.h"
+#include "SkinModelEffect.h"
 /*!
 *@brief	FBXの上方向。
 */
@@ -43,6 +44,25 @@ public:
 	{
 		int boneId = m_skeleton.FindBoneID(boneName);
 		return m_skeleton.GetBone(boneId);
+	}
+	/// <summary>
+	/// マテリアルに対してクエリを行う。
+	/// </summary>
+	/// <param name="func">問い合わせ関数</param>
+	void QueryMaterials(std::function<void(SkinModelEffect*)> func)
+	{
+		m_modelDx->UpdateEffects([&](DirectX::IEffect* material) {
+			auto modelMaterial = (reinterpret_cast<SkinModelEffect*>(material));
+			//modelMaterial->SetRenderMode();
+			func(reinterpret_cast<SkinModelEffect*>(material));
+		});
+	}
+	//
+	void SetIsLight(bool tf) {
+		m_islight = tf;
+	}
+	void SetIsUV(bool tf) {
+		m_IsUV = tf;
 	}
 	/*!
 	*@brief	モデルを描画。
@@ -104,6 +124,7 @@ private:
 		CMatrix mWorld;
 		CMatrix mView;
 		CMatrix mProj;
+		int IsUV;
 	};
 	//ディレクションライト
 	static const int a = 2;
@@ -117,6 +138,7 @@ private:
 		SDirectionLight		dirLight;			//ディレクションライト
 		CVector3			eyePos;				//視点の座標。
 		float				specPow;			//鏡面反射の絞り。
+		int					islight;				//ライトを当てるか？
 	};
 	EnFbxUpAxis			m_enFbxUpAxis = enFbxUpAxisZ;	//!<FBXの上方向。
 	ID3D11Buffer*		m_cb = nullptr;					//!<定数バッファ。
@@ -126,6 +148,8 @@ private:
 	ID3D11SamplerState* m_samplerState = nullptr;		//!<サンプラステート。
 	SLight				m_Light;						//ライト
 	ID3D11Buffer*		m_lightCb = nullptr;			//ライト用定数バッファ
+	bool				m_islight = true;				//ライトを当てるか？フラグ
+	bool				m_IsUV = false;					//UVをうごかすか？フラグ
 public:
 	/*鏡面反射の絞りを設定
 	param	float	0.0～

@@ -6,7 +6,8 @@
 #include"GameCamera.h"
 #include"Fade.h"
 #include"Star.h"
-
+#include"Player2D.h"
+#include"GameClear.h"
 Game::Game()
 {
 }
@@ -17,10 +18,11 @@ Game::~Game()
 }
 
 bool Game::Start() {
-
 	m_fade = FindGO<Fade>("Fade");
+	BackGround* background = nullptr;
+	background = NewGO<BackGround>(0, "background");
 	//スターレベル作成
-	m_level.Init(L"Assets/level/StarL.tkl", [&](LevelObjectData& objData) {
+	m_level.Init(L"Assets/level/level00.tkl", [&](LevelObjectData& objData) {
 		if (wcscmp(objData.name, L"Star") == 0) {
 			auto star = NewGO<Star>(0, "star");
 			m_starList.push_back(star);
@@ -28,22 +30,25 @@ bool Game::Start() {
 			return true;
 		}
 	});
-
-	BackGround* background = nullptr;
-	background = NewGO<BackGround>(0, "background");
 	//プレイヤ-
 	Player* player = nullptr;
 	player = NewGO<Player>(0, "Player");
-
+	Player2D*player2D = nullptr;
+	player2D = NewGO<Player2D>(0, "Player2D");
 	CGameCamera* Camera = nullptr;
 	Camera = NewGO<CGameCamera>(0, "Camera");
-
-	Enemy*enemy = nullptr;
-	enemy = NewGO<Enemy>(0, "Enemy");
+	SetDrawPhysicsCollisionEnable();
+	//Enemy*enemy = nullptr;
+	//enemy = NewGO<Enemy>(0, "Enemy");
 	m_fade = FindGO<Fade>("Fade");
 	m_fade->StartFadeIn();
 	m_state = enState_FadeIn;
 	return true;
+}
+
+void Game::NotifyGameClear() {
+	m_IsGameClear = true;
+	m_gameclear = NewGO<GameClear>(0,"gameclear");
 }
 
 void Game::Update() {
